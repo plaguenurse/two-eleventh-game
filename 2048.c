@@ -60,7 +60,7 @@ void printGameBoard(short gameBoard[SIZE][SIZE], int score)
 	printf("Score: %i\n\n",score);
 }
 
-int main()
+int main(void)
 {
 	//Initialize variables
 	short width = 0, height = 0, i = 0;
