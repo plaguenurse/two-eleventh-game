@@ -29,6 +29,8 @@
 #include <time.h>
 #include <math.h>
 
+#include "confuzz.h"
+
 #define SIZE 4
 #define NUMBER_BASE 2
 
@@ -70,7 +72,7 @@ int main(void)
 	int score = 0;
 	
 	//Seeding RNG
-	srand(time(0));
+	srand(time_seed());
 	
 	//Outputs the base number for the game (2 usually) into a random element of the game board array.
 	width = randomLocation();
