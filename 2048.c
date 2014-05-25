@@ -12,6 +12,7 @@ short randomLocation()
 	return rand() % SIZE;
 }
 
+//Prints out the game board and the score.
 void printGameBoard(short gameBoard[SIZE][SIZE], int score)
 {
 	int width, height; 
@@ -35,13 +36,17 @@ void printGameBoard(short gameBoard[SIZE][SIZE], int score)
 
 int main()
 {
+	//Initialize variables
 	short width = 0, height = 0, i = 0;
 	short gameBoard [SIZE][SIZE] = {{0}};
 	char exit = 0, direction = 'U', checkMatch = 1, validInput = 0,  changesMade = 0;
 	char buffer[8];
 	int score = 0;
+	
+	//Seeding RNG
 	srand(time(0));
 	
+	//Outputs the base number for the game (2 usually) into a random element of the game board array.
 	width = randomLocation();
 	height = randomLocation();
 	while (gameBoard[height][width] != 0)
@@ -57,28 +62,31 @@ int main()
 
 	do
 	{
+		//Checks if the titular tile; usually 2048, but abstracted in this case to the base number to the 11th power.
 		for (width = 0; width < SIZE; width++)
 		{ 
 			for (height = 0; height < SIZE; height++)
 			{
 				if (gameBoard[height][width] == pow(SIZE,11) )
 				{
-					printf("You won!!");
+					printf("You won!!\n");
 				}
 			}
 		}
 		
+		//Get user input.
 		printf("go (U)p, (D)own, (L)eft, or (R)ight: ");
-		
 		fgets(buffer, sizeof(buffer), stdin);
 		sscanf(buffer, " %c", &direction);
 		
+		//Shifts the game board's tiles (the elements in the array) up. 
 		switch(direction)
 		{
 			case 'u':
 			case 'U':
 				changesMade = 0;
 				validInput = 1;
+				//shifts elements in the array up.
 				for (width = 0; width < SIZE; width++)
 				{ 
 					for (height = 0; height < SIZE; height++)
@@ -87,6 +95,10 @@ int main()
 						checkMatch = 1;
 						while (checkMatch)
 						{
+							/* If the element is zero the statement seeks for a non-zero number in the range of the game board and 
+							 * replaces the current element with that value, also replacing the value in that location for zero and
+							 * setting the flag up that a change has been made in the array.
+							 */
 							if(gameBoard[height][width] == 0 && i < SIZE)
 							{
 								if (gameBoard[i][width] != 0)
@@ -100,6 +112,10 @@ int main()
 									i++;
 								}
 							}
+							/* If the element is not zero it seeks until it finds a non-zero number that either matches or doesn't match
+							 * the current element. It then either exits out of the loop; or if the numbers are the same adds the 
+							 * two values together, adds the value of the tile to the score, and flags that a change has been made to the array.
+							 */
 							else if(gameBoard[height][width] != 0 && i < SIZE)
 							{
 								if (gameBoard[height][width] == gameBoard[i][width])
@@ -131,6 +147,7 @@ int main()
 			case 'D':
 				changesMade = 0;
 				validInput = 1;
+				//Shifts the game board's tiles down. See first case for further info on the code.
 				for (width = 0; width < SIZE; width++)
 				{ 
 					for (height = SIZE-1; height > 0; height--)
@@ -181,6 +198,7 @@ int main()
 				break;
 			case 'l':
 			case 'L':
+				//Shifts the game board's tiles left. See first case for further info on the code.
 				changesMade = 0;
 				validInput = 1;
 				for (width = 0; width < SIZE; width++)
@@ -233,6 +251,7 @@ int main()
 				break;
 			case 'r':
 			case 'R':
+				//Shifts the game board's tiles right. See first case for further info on the code.
 				changesMade = 0;
 				validInput = 1;
 				for (height = 0; height < SIZE; height++)
@@ -283,10 +302,12 @@ int main()
 					}
 				}
 				break;
-			default:
-				break;
 		}
 		
+		
+		/* If a valid input was inputed and no changes were made to the board, these lines check to see if
+		 * the array is completely full. If the array is full and no changes can be made then the game ends.
+		 */
 		if (validInput && !changesMade)
 		{
 			exit = 1;
@@ -303,6 +324,7 @@ int main()
 		
 		}
 		
+		// If any elements in the game board moved, then a new tile is made randomly in a valid location.
 		if (changesMade)
 		{
 			width = randomLocation();
